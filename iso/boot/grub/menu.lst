@@ -1,0 +1,5 @@
+default=0
+timeout=0
+
+title cosmo
+kernel /boot/kernel.elf
