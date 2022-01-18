@@ -12,7 +12,7 @@ align 4                         ; Align at 4 bytes.
 kernel_stack:                   ; Label points to beginning of memory.
     resb KERNEL_STACK_SIZE      ; Reserve stack for the kernel.
 
-section .text:                  ; Start of the text (code) section.
+section .text                   ; Start of the text (code) section.
 align 4                         ; The code must be 4 byte aligned.
     dd MAGIC_NUMBER             ; Write the magic number to the machine code.
     dd FLAGS                    ; Write flags.
