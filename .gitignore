@@ -1,0 +1,12 @@
+# Ignore the OS ISO image. The image should always be built from source, never
+# version controlled.
+*.iso
+
+# Ignore the documentation directory.
+docs
+
+# Ignore object files.
+*.o
+
+# Ignore ELF files.
+*.elf
