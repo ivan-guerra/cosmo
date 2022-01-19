@@ -1,7 +1,7 @@
-OBJECTS = loader.o kmain.o
-CC = gcc
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-         -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+OBJECTS = loader.o framebuffer_asm.o framebuffer.o kmain.o
+CC = g++
+CPPFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+           -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -std=c++14
 LDFLAGS = -T link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
@@ -24,8 +24,8 @@ cosmo.iso: kernel.elf
         -o cosmo.iso                    \
         iso
 
-%.o: %.c
-	$(CC) $(CFLAGS)  $< -o $@
+%.o: %.cc
+	$(CC) $(CPPFLAGS)  $< -o $@
 
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
