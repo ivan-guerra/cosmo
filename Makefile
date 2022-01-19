@@ -8,6 +8,9 @@ ASFLAGS = -f elf
 
 all: cosmo.iso
 
+docs:
+	doxygen doxygen_conf.txt
+
 kernel.elf: $(OBJECTS)
 	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
 
@@ -31,4 +34,4 @@ cosmo.iso: kernel.elf
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o kernel.elf cosmo.iso bochslog.txt
+	rm -rf *.o kernel.elf cosmo.iso bochslog.txt docs
