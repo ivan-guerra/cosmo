@@ -10,3 +10,6 @@ docs
 
 # Ignore ELF files.
 *.elf
+
+# Ignore the Bochs log file.
+bochslog.txt
