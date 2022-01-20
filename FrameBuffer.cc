@@ -1,9 +1,5 @@
+#include "PortIO.h"
 #include "FrameBuffer.h"
-
-/*!
- * \brief See framebuffer_asm.s for details.
- */
-extern "C" void outb(unsigned short port, unsigned char data);
 
 namespace cosmo
 {
