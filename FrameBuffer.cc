@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "FrameBuffer.h"
 
 /*!
  * \brief See framebuffer_asm.s for details.

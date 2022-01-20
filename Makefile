@@ -1,4 +1,4 @@
-OBJECTS = loader.o framebuffer_asm.o framebuffer.o kmain.o
+OBJECTS = loader.o framebuffer_asm.o FrameBuffer.o kmain.o
 CC = g++
 CPPFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
            -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -std=c++14

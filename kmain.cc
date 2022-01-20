@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "FrameBuffer.h"
 
 void FillStr(char* str, unsigned int len, char fill)
 {
