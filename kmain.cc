@@ -1,3 +1,4 @@
+#include "SerialPort.h"
 #include "FrameBuffer.h"
 
 void FillStr(char* str, unsigned int len, char fill)
@@ -25,8 +26,23 @@ int main(void)
     cosmo::FrameBuffer fb;
     fb.ClearScreen();
 
-    const char* text = "Welcome to cosmo OS!";
-    fb.PrintString(text, StrLen(text));
+    const char* kWelcomeText = "Welcome to cosmo OS!";
+    fb.PrintString(kWelcomeText, StrLen(kWelcomeText));
+
+    const char* kSerialWriteNotice = "\nWriting serial data...";
+    fb.PrintString(kSerialWriteNotice, StrLen(kSerialWriteNotice));
+
+    const char* kSerialMsg = "Hello, world.\nThis is cosmo OS speaking!";
+    const char* kSerialErrorMsg = "\nUnable to initialize serial port!";
+    const char* kSerialSuccessMsg = "\nData sent to serial port successfully!";
+
+    cosmo::SerialPort sp;
+    if (!sp.Init()) {
+        fb.PrintString(kSerialErrorMsg, StrLen(kSerialErrorMsg));
+    } else {
+        fb.PrintString(kSerialSuccessMsg, StrLen(kSerialSuccessMsg));
+        sp.PrintString(kSerialMsg, StrLen(kSerialMsg));
+    }
 
     return 0;
 }

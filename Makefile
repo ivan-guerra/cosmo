@@ -1,4 +1,4 @@
-OBJECTS = loader.o PortIO.o FrameBuffer.o kmain.o
+OBJECTS = loader.o PortIO.o FrameBuffer.o SerialPort.o kmain.o
 CC = g++
 CPPFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
            -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -std=c++14
@@ -34,4 +34,4 @@ cosmo.iso: kernel.elf
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o kernel.elf cosmo.iso bochslog.txt docs
+	rm -rf *.o kernel.elf cosmo.iso bochslog.txt docs com*.out
