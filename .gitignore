@@ -1,9 +1,8 @@
-# Ignore the OS ISO image. The image should always be built from source, never
-# version controlled.
-*.iso
+# Ignore the bin directory if it exists.
+bin
 
 # Ignore the documentation directory.
-docs
+docs/cosmo_docs
 
 # Ignore object files.
 *.o
@@ -13,3 +12,6 @@ docs
 
 # Ignore the Bochs log file.
 bochslog.txt
+
+# Ignore CMake build directories.
+/build*

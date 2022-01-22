@@ -6,7 +6,7 @@ DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "cosmo OS"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          = "An OS development research project."
-OUTPUT_DIRECTORY       = ./docs
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_SOURCE_DIR@/cosmo_docs/
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -38,7 +38,7 @@ WARN_AS_ERROR          = NO
 # Configuration options related to the input files
 #------------------------------------------------------------------------------
 
-INPUT                  = ./
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/../include/
 USE_MDFILE_AS_MAINPAGE = README.md
 FILE_PATTERNS          = *.h
 RECURSIVE              = YES
