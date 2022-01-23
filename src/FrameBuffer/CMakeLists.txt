@@ -4,7 +4,6 @@ project(FrameBuffer DESCRIPTION "VGA Text Mode Driver"
                     LANGUAGES   CXX
 )
 
-# Creation of the 32-bit kernel ELF.
 add_library(${PROJECT_NAME} OBJECT FrameBuffer.cc)
 
 target_include_directories(${PROJECT_NAME}
