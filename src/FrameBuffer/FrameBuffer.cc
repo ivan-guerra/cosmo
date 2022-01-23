@@ -8,47 +8,6 @@ const int FrameBuffer::kNumCols = 80;
 unsigned short* FrameBuffer::kFrameBufferAddress =
     reinterpret_cast<unsigned short*>(0x000B8000);
 
-void FrameBuffer::PrintChar(char c)
-{
-    const int       kNumTab   = 4;
-    unsigned short  attribute = attr_byte_ << 8;
-    unsigned short* location  = nullptr;
-
-    if ((0x08 == c) && cursor_pos_.x) {
-        /* Handle a backspace character. Walk back a column. */
-        cursor_pos_.x--;
-    } else if ('\t' == c) {
-        /* Push the cursor foward by the number stored in kNumTab. */
-        cursor_pos_.x = (cursor_pos_.x + kNumTab) & ~(kNumTab - 1);
-    } else if ('\r' == c) {
-        cursor_pos_.x = 0;
-    } else if ('\n' == c) {
-        cursor_pos_.x = 0;
-        cursor_pos_.y++;
-    } else if (c >= ' ') {
-        location = video_mem_ + (cursor_pos_.y * kNumCols + cursor_pos_.x);
-
-        /* The data to written to the VGA memory cell is a 16-bit value with
-           the format ATTR(8) | CHAR(8). */
-        *location = c | attribute;
-
-        /* Advance the cursor by one. */
-        cursor_pos_.x++;
-    }
-
-    /* Handle the EOL case. */
-    if (cursor_pos_.x >= kNumCols) {
-        cursor_pos_.x = 0;
-        cursor_pos_.y++;
-    }
-
-    /* Scroll the screen if necessary. */
-    ScrollScreen();
-
-    /* Update the cursor location on screen. */
-    MoveCursor(cursor_pos_.y, cursor_pos_.x);
-}
-
 void FrameBuffer::ScrollScreen()
 {
     /* NOOP in the case where there is room left to right in the VGA buffer. */
@@ -108,4 +67,44 @@ void FrameBuffer::MoveCursor(int row, int col)
     outb(FrameBufferIOPort::kDataPort,    pos & 0x00FF);
 }
 
+void FrameBuffer::PrintChar(char c)
+{
+    const int       kNumTab   = 4;
+    unsigned short  attribute = attr_byte_ << 8;
+    unsigned short* location  = nullptr;
+
+    if ((0x08 == c) && cursor_pos_.x) {
+        /* Handle a backspace character. Walk back a column. */
+        cursor_pos_.x--;
+    } else if ('\t' == c) {
+        /* Push the cursor foward by the number stored in kNumTab. */
+        cursor_pos_.x = (cursor_pos_.x + kNumTab) & ~(kNumTab - 1);
+    } else if ('\r' == c) {
+        cursor_pos_.x = 0;
+    } else if ('\n' == c) {
+        cursor_pos_.x = 0;
+        cursor_pos_.y++;
+    } else if (c >= ' ') {
+        location = video_mem_ + (cursor_pos_.y * kNumCols + cursor_pos_.x);
+
+        /* The data to written to the VGA memory cell is a 16-bit value with
+           the format ATTR(8) | CHAR(8). */
+        *location = c | attribute;
+
+        /* Advance the cursor by one. */
+        cursor_pos_.x++;
+    }
+
+    /* Handle the EOL case. */
+    if (cursor_pos_.x >= kNumCols) {
+        cursor_pos_.x = 0;
+        cursor_pos_.y++;
+    }
+
+    /* Scroll the screen if necessary. */
+    ScrollScreen();
+
+    /* Update the cursor location on screen. */
+    MoveCursor(cursor_pos_.y, cursor_pos_.x);
+}
 } // end cosmo

@@ -102,6 +102,14 @@ public:
     bool ActivePort() const { return initialized_; }
 
     /*!
+     * \brief Print \a c to the serial port.
+     *
+     * If PrintChar is called on an uninitialized SerialPort object, PrintChar
+     * immediately returns.
+     */
+    void PrintChar(unsigned char c) const;
+
+    /*!
      * \brief Print the string \a str to the serial port.
      *
      * Passing a \a len value that extends beyond the end of \a str causes
@@ -136,14 +144,6 @@ private:
      * its behavior is undefined and the result mustn't be used.
      */
     bool TransmitBufferEmpty() const { return (inb(port_ + PortOffset::kLineStatusOffset) & 0x20); }
-
-    /*!
-     * \brief Print \a c to the serial port.
-     *
-     * If PrintChar is called on an uninitialized SerialPort object, PrintChar
-     * immediately returns.
-     */
-    void PrintChar(unsigned char c) const;
 
     COMPort  port_;        /*!< The COM port. */
     BaudRate baud_;        /*!< The baud rate. */

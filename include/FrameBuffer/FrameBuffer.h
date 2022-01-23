@@ -84,6 +84,11 @@ public:
     void MoveCursor(int row, int col);
 
     /*!
+     * \brief Print \a c to the screen at the current cursor location.
+     */
+    void PrintChar(char c);
+
+    /*!
      * \brief Print the string \a str to the screen.
      *
      * Passing a \a len value that extends beyond the end of \a str can be
@@ -129,11 +134,6 @@ private:
     };
 
     static unsigned short* kFrameBufferAddress; /*!< VGA memory start address. */
-
-    /*!
-     * \brief Print \a c to the screen at the current cursor location.
-     */
-    void PrintChar(char c);
 
     /*!
      * \brief Scroll text if the current cursor row value exceeds the limit.

@@ -3,18 +3,6 @@
 
 namespace cosmo
 {
-void SerialPort::PrintChar(unsigned char c) const
-{
-    /* Avoid trying to send to an uninitialized serial port. */
-    if (!initialized_)
-        return;
-
-    /* Poll until the transmit buffer is empty. */
-    while (!TransmitBufferEmpty());
-
-    outb(port_, c);
-}
-
 SerialPort::SerialPort() :
     port_(COMPort::kUndefinedPort),
     baud_(BaudRate::kUndefinedBaud),
@@ -62,5 +50,17 @@ bool SerialPort::Init(COMPort com, BaudRate baud)
     initialized_ = true;
 
     return initialized_;
+}
+
+void SerialPort::PrintChar(unsigned char c) const
+{
+    /* Avoid trying to send to an uninitialized serial port. */
+    if (!initialized_)
+        return;
+
+    /* Poll until the transmit buffer is empty. */
+    while (!TransmitBufferEmpty());
+
+    outb(port_, c);
 }
 } // end cosmo
