@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.13...3.22)
+
 # This CMakeLists.txt was taken from here
 # https://vicrucann.github.io/tutorials/quick-cmake-doxygen/
 
