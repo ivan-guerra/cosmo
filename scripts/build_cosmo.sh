@@ -39,8 +39,10 @@ fi
 
 # Build and install the kernel.
 pushd $COSMO_BUILD_DIR
-    cmake -DBUILD_DOC=${BUILD_DOC} ../ &&
-    make kernel.elf                    &&
+    cmake                                                     \
+        -DCMAKE_TOOLCHAIN_FILE=${COSMO_PROJECT_PATH}/cmake/i686-elf-gcc.cmake    \
+        -DBUILD_DOC=${BUILD_DOC} ../                       && \
+    make all                                               &&
     make install
 
     # Exit if any of the above commands fails.
