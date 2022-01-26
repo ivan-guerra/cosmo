@@ -10,11 +10,25 @@ NC='\033[0m'
 # Source the project configuration.
 source config_cosmo.sh
 
-# Verify genisoimage has been installed on the system.
-if ! command -v genisoimage &> /dev/null
+# Verify grub-mkrescue is installed.
+if ! command -v grub-mkrescue &> /dev/null
 then
-    echo -e "${LRED}genisoimage could not be found.${NC}"
-    echo -e "${LRED}Please install genisoimage to build the OS image.${NC}"
+    echo -e "${LRED}grub-mkrescue could not be found.${NC}"
+    echo -e "${LRED}Please install grub to build the OS image.${NC}"
+    exit 1
+fi
+
+if ! command -v xorriso &> /dev/null
+then
+    echo -e "${LRED}xorriso could not be found.${NC}"
+    echo -e "${LRED}Please install xorriso to build the OS image.${NC}"
+    exit 1
+fi
+
+if ! command -v mtools &> /dev/null
+then
+    echo -e "${LRED}GNU mtools could not be found.${NC}"
+    echo -e "${LRED}Please install GNU mtools to build the OS image.${NC}"
     exit 1
 fi
 
@@ -36,15 +50,8 @@ fi
 
 # Run the genisoimage on the contents of cosmo/iso. The output is the ISO image
 # cosmo/bin/cosmo.iso.
-if genisoimage -R                   \
-    -b boot/grub/stage2_eltorito    \
-    -no-emul-boot                   \
-    -boot-load-size 4               \
-    -A cosmo                        \
-    -input-charset utf8             \
-    -quiet                          \
-    -boot-info-table                \
-    -o $COSMO_BIN_DIR/cosmo.iso     \
+if grub-mkrescue        \
+    -o ../bin/cosmo.iso \
     ../iso;
 then
     echo -e "${LGREEN}cosmo.iso successfully created. See ${COSMO_BIN_DIR}/cosmo.iso.${NC}"
