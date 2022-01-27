@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include "FrameBuffer.h"
 #include "SerialPort.h"
 
@@ -196,7 +199,7 @@ private:
         /*!
          * \brief Return the length of the string stored in str_buffer_.
          */
-        unsigned int GetStrLen() const;
+        size_t GetStrLen() const;
 
         /*!
          * \brief Return a pointer to the buffered string argument.
@@ -215,12 +218,12 @@ private:
         char str_buffer_[kStrBufferSize]; /*!< String arg buffer. */
     }; // end Arg
 
-    static const int kLogBufferSize    = 64; /*!< Logger scratch space size. */
+    static const int kLogBufferSize = 64; /*!< Logger scratch space size. */
 
     /*!
      * \brief Return the length of the C-style string in #log_buffer_.
      */
-    unsigned int LogBufferLen() const;
+    size_t LogBufferLen() const;
 
     /*!
      * \brief Reverse the data from index i to j in #log_buffer_ (inclusive).

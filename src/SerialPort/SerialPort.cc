@@ -52,7 +52,7 @@ bool SerialPort::Init(COMPort com, BaudRate baud)
     return initialized_;
 }
 
-void SerialPort::PrintChar(unsigned char c) const
+void SerialPort::PrintChar(char c) const
 {
     /* Avoid trying to send to an uninitialized serial port. */
     if (!initialized_)

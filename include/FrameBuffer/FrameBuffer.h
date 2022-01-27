@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
+
 namespace cosmo
 {
 /*!
@@ -98,7 +101,7 @@ public:
      * \param len Length of \a str.
      */
     template <typename T>
-    void PrintString(T* str, unsigned int len);
+    void PrintString(T* str, size_t len);
 
 private:
     /*!
@@ -109,7 +112,7 @@ private:
     enum FrameBufferIOCmd
     {
         kHighByteCommand = 14, /*!< Framebuffer high byte command. */
-        kLowByteCommand  = 15 /*!< Framebuffer low byte command. */
+        kLowByteCommand  = 15  /*!< Framebuffer low byte command. */
     };
 
     /*!
@@ -120,7 +123,7 @@ private:
     enum FrameBufferIOPort
     {
         kCommandPort = 0x3D4, /*!< Framebuffer command port address. */
-        kDataPort    = 0x3D5 /*!< Framebuffer data port address. */
+        kDataPort    = 0x3D5  /*!< Framebuffer data port address. */
     };
 
     /*!
@@ -133,7 +136,7 @@ private:
         int y = 0; /*!< Cursor row index. */
     };
 
-    static unsigned short* kFrameBufferAddress; /*!< VGA memory start address. */
+    static uint16_t* kFrameBufferAddress; /*!< VGA memory start address. */
 
     /*!
      * \brief Scroll text if the current cursor row value exceeds the limit.
@@ -145,20 +148,20 @@ private:
      */
     void ScrollScreen();
 
-    unsigned short* video_mem_; /*!< Start address of VGA memory. */
-    unsigned char   attr_byte_; /*!< Attribute byte containing FG/BG data. */
-    CursorPos       cursor_pos_; /*!< Current cursor position. */
+    uint16_t* video_mem_;  /*!< Start address of VGA memory. */
+    uint8_t   attr_byte_;  /*!< Attribute byte containing FG/BG data. */
+    CursorPos cursor_pos_; /*!< Current cursor position. */
 }; // end Framebuffer
 
 template <typename T>
-void FrameBuffer::PrintString(T* str, unsigned int len)
+void FrameBuffer::PrintString(T* str, size_t len)
 {
     /* NOOP if given a nullptr. */
     if (!str)
         return;
 
     /* Print the string characters one at a time to the screen. */
-    for (unsigned int i = 0; i < len; ++i)
+    for (size_t i = 0; i < len; ++i)
         PrintChar(str[i]);
 }
 } // end cosmo

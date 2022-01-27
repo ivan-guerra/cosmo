@@ -5,8 +5,8 @@ namespace cosmo
 {
 const int FrameBuffer::kNumRows = 25;
 const int FrameBuffer::kNumCols = 80;
-unsigned short* FrameBuffer::kFrameBufferAddress =
-    reinterpret_cast<unsigned short*>(0x000B8000);
+uint16_t* FrameBuffer::kFrameBufferAddress =
+    reinterpret_cast<uint16_t*>(0x000B8000);
 
 void FrameBuffer::ScrollScreen()
 {
@@ -15,7 +15,7 @@ void FrameBuffer::ScrollScreen()
         return;
 
     /* space is an space char fitted with the User's FG/BG attributes. */
-    unsigned short space = 0x20 | (attr_byte_ << 8);
+    uint16_t space = 0x20 | (attr_byte_ << 8);
 
     /* Move all text up by one line. */
     for (int i = 0; i < ((kNumRows - 1) * kNumCols); ++i)
@@ -40,7 +40,7 @@ void FrameBuffer::ClearScreen()
 {
     /* Fill the screen with blanks. Inclusion of attr_byte_ ensures the
        text has the correct FG and BG colors. */
-    unsigned short space = 0x20 | (attr_byte_ << 8);
+    uint16_t space = 0x20 | (attr_byte_ << 8);
     for (int i = 0; i < (kNumRows * kNumCols); ++i)
         video_mem_[i] = space;
 
@@ -56,7 +56,7 @@ void FrameBuffer::MoveCursor(int row, int col)
 
     cursor_pos_.y = row;
     cursor_pos_.x = col;
-    unsigned short pos = (row * kNumCols) + col;
+    uint16_t pos  = (row * kNumCols) + col;
 
     /* Set the cursor low port.*/
     outb(FrameBufferIOPort::kCommandPort, FrameBufferIOCmd::kHighByteCommand);
@@ -69,9 +69,9 @@ void FrameBuffer::MoveCursor(int row, int col)
 
 void FrameBuffer::PrintChar(char c)
 {
-    const int       kNumTab   = 4;
-    unsigned short  attribute = attr_byte_ << 8;
-    unsigned short* location  = nullptr;
+    const int kNumTab   = 4;
+    uint16_t  attribute = attr_byte_ << 8;
+    uint16_t* location  = nullptr;
 
     if ((0x08 == c) && cursor_pos_.x) {
         /* Handle a backspace character. Walk back a column. */

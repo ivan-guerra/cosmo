@@ -12,7 +12,7 @@ Logger::Arg::Arg(const char* value) :
     str_buffer_[i] = '\0';
 }
 
-unsigned int Logger::Arg::GetStrLen() const
+size_t Logger::Arg::GetStrLen() const
 {
     unsigned int len = 0;
     for (int i = 0; str_buffer_[i] != '\0'; ++i)
@@ -21,7 +21,7 @@ unsigned int Logger::Arg::GetStrLen() const
     return len;
 }
 
-unsigned int Logger::LogBufferLen() const
+size_t Logger::LogBufferLen() const
 {
     unsigned int len = 0;
     for (int i = 0; log_buffer_[i] != '\0'; ++i)

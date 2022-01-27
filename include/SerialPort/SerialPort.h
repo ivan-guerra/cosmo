@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include "PortIO.h"
 
 namespace cosmo
@@ -107,7 +110,7 @@ public:
      * If PrintChar is called on an uninitialized SerialPort object, PrintChar
      * immediately returns.
      */
-    void PrintChar(unsigned char c) const;
+    void PrintChar(char c) const;
 
     /*!
      * \brief Print the string \a str to the serial port.
@@ -119,7 +122,7 @@ public:
      * \param len Length of \a str.
      */
     template <typename T>
-    void PrintString(T* str, unsigned int len) const;
+    void PrintString(T* str, size_t len) const;
 
 private:
     /*!
@@ -151,13 +154,13 @@ private:
 }; // end SerialPort
 
 template <typename T>
-void SerialPort::PrintString(T* str, unsigned int len) const
+void SerialPort::PrintString(T* str, size_t len) const
 {
     /* NOOP if given an empty string or if the serial port is uninitialized. */
     if (!str || !initialized_)
         return;
 
-    for (unsigned int i = 0; i < len; ++i)
+    for (size_t i = 0; i < len; ++i)
         PrintChar(str[i]);
 }
 } // end cosmo
