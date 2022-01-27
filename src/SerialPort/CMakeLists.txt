@@ -13,17 +13,7 @@ target_include_directories(${PROJECT_NAME}
 
 target_compile_options(${PROJECT_NAME}
     PRIVATE
-        -m32
-        -nostdlib
-        -nostdinc
-        -fno-builtin
-        -fno-stack-protector
-        -nostartfiles
-        -nodefaultlibs
-        -Wall
-        -Wextra
         -Werror
-        -c
 )
 
 target_compile_features(${PROJECT_NAME}

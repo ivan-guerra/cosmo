@@ -1,7 +1,7 @@
 #include "Logger.h"
 #include "FrameBuffer.h"
 
-int main(void)
+extern "C" int kernel_main(void)
 {
     cosmo::FrameBuffer fb;
     fb.ClearScreen();
