@@ -1,26 +1,38 @@
-ENTRY(loader)                /* The name of the entry label. */
+/* The bootloader will look at this image and start execution at the symbol
+   designated as the entry point. */
+ENTRY(_loader)
 
-SECTIONS {
-    . = 0x00100000;          /* The code should be loaded at 1 MB. */
+SECTIONS
+{
+    /* Begin putting sections at 1 MiB, a conventional place for kernels to be
+	   loaded at by the bootloader. */
+    . = 1M;
 
-    .text ALIGN (0x1000) :   /* Align at 4 KB. */
+    /* First put the multiboot header, as it is required to be put very early
+	   early in the image or the bootloader won't recognize the file format.
+	   Next we'll put the .text section. */
+    .text BLOCK(4K) : ALIGN (4K)
     {
-        *(.text)             /* All text sections from all files. */
+        *(.multiboot)
+        *(.text)
     }
 
-    .rodata ALIGN (0x1000) : /* Align at 4 KB. */
+    /* Read-only data. */
+    .rodata BLOCK(4K) : ALIGN(4K)
     {
-        *(.rodata*)          /* All read-only data sections from all files. */
+        *(.rodata*)
     }
 
-    .data ALIGN (0x1000) :   /* Align at 4 KB. */
+    /* Read-write data (initialized). */
+    .data BLOCK (4K) : ALIGN(4K)
     {
-        *(.data)             /* All data sections from all files. */
+        *(.data)
     }
 
-    .bss ALIGN (0x1000) :    /* Align at 4 KB. */
+    /* Read-write data (uninitialized) and stack. */
+    .bss BLOCK(4K) : ALIGN(4K)
     {
-        *(COMMON)            /* All COMMON sections from all files. */
-        *(.bss)              /* All bss sections from all files. */
+        *(COMMON)
+        *(.bss)
     }
 }

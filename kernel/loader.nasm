@@ -1,27 +1,33 @@
-global loader                   ; The entry symbol for ELF.
+ALIGNMENT equ (1<<0)                ; Align loaded modules on page boundaries.
+MEMINFO   equ (1<<1)                ; Provide memory map.
+FLAGS     equ (ALIGNMENT | MEMINFO) ; This is the Multiboot flag field.
+MAGIC     equ 0x1BADB002            ; Magic number tells the bootloader where to find the header.
+CHECKSUM  equ -(MAGIC + FLAGS)      ; Checksum of above, proves we are multiboot.
 
-MAGIC_NUMBER equ 0x1BADB002     ; Define the magic number constant.
-FLAGS        equ 0x0            ; Multiboot flags.
-CHECKSUM     equ -MAGIC_NUMBER  ; Calculate the checksum
-                                ; (magic number + checksum + flags should
-                                ; equal 0).
-KERNEL_STACK_SIZE equ 4096      ; Size of stack in bytes.
+; Declare a Multiboot header that marks the program as a kernel.
+section .multiboot
+align 4
+dd MAGIC
+dd FLAGS
+dd CHECKSUM
 
+; Configure the 16KiB kernel stack.
 section .bss
-align 4                         ; Align at 4 bytes.
-kernel_stack:                   ; Label points to beginning of memory.
-    resb KERNEL_STACK_SIZE      ; Reserve stack for the kernel.
+align 16
+stack_bottom:
+resb 16384
+stack_top:
 
-section .text                   ; Start of the text (code) section.
-align 4                         ; The code must be 4 byte aligned.
-    dd MAGIC_NUMBER             ; Write the magic number to the machine code.
-    dd FLAGS                    ; Write flags.
-    dd CHECKSUM                 ; Write the checksum.
+section .text
+global _loader
+_loader:
+    mov esp, stack_top ; Setup the kernel stack.
 
-loader:                         ; loader label (entry point in the ld script).
-    mov esp, kernel_stack + KERNEL_STACK_SIZE ; point esp to the start of the
-                                              ; kstack (end of memory area).
-    extern main                 ; main defined in kmain.c.
-    call main                   ; Call main (just puts 0xDEADBEEF in eax).
-    .loop:
-        jmp .loop               ; Loop forever.
+    extern kernel_main ; See kernel_main.cc.
+    call kernel_main   ; Enter the kernel.
+
+    ; The kernel returned and the system has nothing else to do. Clear
+    ; interrupts and halt the machine.
+    cli
+halt_kernel: hlt
+    jmp halt_kernel
