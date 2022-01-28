@@ -34,6 +34,7 @@ target_link_libraries(${PROJECT_NAME}
         PortIO
         FrameBuffer
         SerialPort
+        GlobalDescriptorTable
 )
 
 set(KERNEL_INSTALL_DIR "${CMAKE_SOURCE_DIR}/iso/boot")
