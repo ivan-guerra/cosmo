@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13...3.22)
 
-project(GlobalDescriptorTable DESCRIPTION "Global Descriptor Table Utility"
+project(GlobalDescriptorTable DESCRIPTION "Global Descriptor Table"
                               LANGUAGES   ASM_NASM CXX
 )
 

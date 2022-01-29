@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 
 #include "FlushGDT.h"
@@ -56,6 +57,12 @@ public:
     GlobalDescriptorTable& operator=(GlobalDescriptorTable&&) = delete;
 
     /*!
+     * \brief Return the GdtEntry at GDT index \a i.
+     */
+    const GdtEntry& operator[](int i) const { return gdt_entries_[i]; }
+    GdtEntry& operator[](int i) { return gdt_entries_[i]; }
+
+    /*!
      * \brief Configure the segment descriptor.
      *
      * Indexing a segment descriptor beyond the bounds of the GDT will lead
@@ -74,7 +81,7 @@ public:
     /*!
      * \brief Flush the current GDT to the appropriate CPU segment registers.
      */
-    void FlushGdt() { flush_gdt((uint32_t)&gdt_table_); }
+    void FlushGdt() { flush_gdt(reinterpret_cast<uintptr_t>(&gdtr_)); }
 
     /*!
      * \brief Return the number of GDT entries in this GlobalDescriptorTable.
@@ -83,25 +90,25 @@ public:
 
 private:
     /*!
-     * \struct GdtTable
+     * \struct GdtRegister
      *
      * This struct defines the base address and limit of the GDT.
      */
-    struct __attribute__((packed)) GdtTable
+    struct __attribute__((packed)) GdtRegister
     {
         uint16_t limit; /*! Last valid address in the GDT. */
         uint32_t base;  /*! The address of the first descriptor. */
-    }; // end GdtTable
+    }; // end GdtRegister
 
-    struct GdtTable gdt_table_;      /*!< GDT table. */
+    struct GdtRegister gdtr_;      /*!< GDT register. */
     struct GdtEntry gdt_entries_[N]; /*!< GDT entries. */
 }; // end GlobalDescriptorTable
 
 template <size_t N>
 GlobalDescriptorTable<N>::GlobalDescriptorTable()
 {
-    gdt_table_.limit = (sizeof(GdtEntry) * N) - 1;
-    gdt_table_.base  = (uint32_t)&gdt_entries_;
+    gdtr_.limit = (sizeof(GdtEntry) * N) - 1;
+    gdtr_.base  = reinterpret_cast<uintptr_t>(&gdt_entries_);
 }
 
 template <size_t N>
