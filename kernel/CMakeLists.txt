@@ -35,6 +35,7 @@ target_link_libraries(${PROJECT_NAME}
         FrameBuffer
         SerialPort
         GlobalDescriptorTable
+        InterruptDescriptorTable
 )
 
 set(KERNEL_INSTALL_DIR "${CMAKE_SOURCE_DIR}/iso/boot")

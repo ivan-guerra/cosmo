@@ -1,6 +1,5 @@
-#include "Logger.h"
-#include "FrameBuffer.h"
 #include "GlobalDescriptorTable.h"
+#include "InterruptDescriptorTable.h"
 
 extern "C" int kernel_main(void)
 {
@@ -13,19 +12,12 @@ extern "C" int kernel_main(void)
     gdt.SetGate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); /* User mode data segment. */
     gdt.FlushGdt();
 
-    cosmo::FrameBuffer fb;
-    fb.ClearScreen();
+    cosmo::InterruptDescriptorTable idt;
+    /* TODO: Register ISRs. */
+    idt.FlushIdt();
 
-    /* Sample values to be logged. */
-    char         cvalue = '#';
-    int          ivalue = -42;
-    unsigned int uvalue = 0xffffffff;
-    const char*  svalue = "cosmo OS";
-
-    cosmo::Logger logger;
-    logger.LogInfo(fb,
-        "cvalue = %c\nivalue = %d\nuvalue = %u\nuvalue(hex) = %X\nsvalue = %s\n",
-        cvalue, ivalue, uvalue, uvalue, svalue);
+    __asm__ volatile ("int $0x3");
+    __asm__ volatile ("int $0x10");
 
     return 0;
 }
