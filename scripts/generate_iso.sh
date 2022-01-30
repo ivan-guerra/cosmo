@@ -11,7 +11,17 @@ NC='\033[0m'
 source config_cosmo.sh
 
 # Verify grub-mkrescue is installed.
-if ! command -v grub-mkrescue &> /dev/null
+COSMO_GRUB_MKRESCUE=""
+if command -v grub-mkrescue &> /dev/null
+then
+    COSMO_GRUB_MKRESCUE="grub-mkrescue"
+elif command -v grub2-mkrescue &> /dev/null
+then
+    COSMO_GRUB_MKRESCUE="grub2-mkrescue"
+fi
+
+# grub-mkrescue could not be found, let the User know.
+if [ -z "${COSMO_GRUB_MKRESCUE}" ]
 then
     echo -e "${LRED}grub-mkrescue could not be found.${NC}"
     echo -e "${LRED}Please install grub to build the OS image.${NC}"
@@ -50,8 +60,8 @@ fi
 
 # Run the genisoimage on the contents of cosmo/iso. The output is the ISO image
 # cosmo/bin/cosmo.iso.
-if grub-mkrescue        \
-    -o ../bin/cosmo.iso \
+if ${COSMO_GRUB_MKRESCUE} \
+    -o ../bin/cosmo.iso   \
     ../iso;
 then
     echo -e "${LGREEN}cosmo.iso successfully created. See ${COSMO_BIN_DIR}/cosmo.iso.${NC}"
