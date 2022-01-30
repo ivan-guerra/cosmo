@@ -45,14 +45,7 @@ then
 fi
 
 # Run the Bochs emulator.
-if bochs                                    \
+bochs                                       \
     -f $COSMO_BOCHS_RC_FILE                 \
     -log $COSMO_BOCHS_LOG_DIR/bochslog.txt  \
     -q;
-then
-    echo -e "${LGREEN}Emulation was successful!${NC}"
-    exit 0
-else
-    echo -e "${LRED}Unable to run bochs sim. See console messages above.${NC}"
-    exit 1
-fi
