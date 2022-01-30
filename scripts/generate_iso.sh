@@ -46,7 +46,7 @@ fi
 if [ ! -f $COSMO_ELF_FILE ]
 then
     echo -e "${LRED}kernel.elf not detected!${NC}"
-    echo -e "${LRED}Did you build AND install using Make?${NC}"
+    echo -e "${LRED}Did you forget to run build_cosmo.sh?${NC}"
     exit 1
 else
     echo -e "${LGREEN}kernel.elf found at '$COSMO_ELF_FILE'${NC}"
