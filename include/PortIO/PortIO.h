@@ -19,3 +19,8 @@ extern "C" void outb(uint16_t port, uint8_t data);
  * \returns The byte read from \a port.
  */
 extern "C" unsigned char inb(uint16_t port);
+
+/*!
+ * \brief Wait a very small amount of time (1 to 4 microseconds, generally).
+ */
+void io_wait();
