@@ -15,3 +15,6 @@ scripts/bochs_logs
 
 # Ignore CMake build directories.
 /build*
+
+# Ignore the Vim Syntastic plugin's CPP config.
+.syntastic_cpp_config
