@@ -68,11 +68,14 @@ public:
      *
      * \param vector Offset of the interrupt vector in the IDT.
      * \param isr Pointer to the address of the ISR.
-     * \param selector 16-bit code segment selector.
-     * \param flags Gate configuration flags.
+     * \param selector 16-bit code segment selector. Default of 0x08 is points
+     *                 to the kernel code segment.
+     * \param flags Gate configuration flags. Default of 0x8E indicates a
+     *              entry is present and has DPL of of 0. The E 0x8E is
+     *              required.
      */
-    void SetGate(uint8_t vector, uint32_t isr, uint16_t selector,
-                 uint8_t flags);
+    void SetGate(uint8_t vector, uint32_t isr, uint16_t selector=0x08,
+                 uint8_t flags=0x8E);
 
     /*!
      * \brief Flush the current IDT to the idtr register.
