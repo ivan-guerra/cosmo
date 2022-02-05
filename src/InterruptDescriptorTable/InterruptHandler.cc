@@ -4,7 +4,7 @@
 
 namespace cosmo
 {
-void interrupt::interrupt_handler(struct InterruptContext* int_context)
+void interrupt::isr_handler(struct InterruptContext* int_context)
 {
     cosmo::FrameBuffer fb;
     fb.ClearScreen();

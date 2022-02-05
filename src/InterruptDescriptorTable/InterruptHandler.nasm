@@ -28,7 +28,7 @@
 ; compiler can change the state of the stack). A simple solution is to
 ; pass a pointer to the register context. It's okay if the compiler changes
 ; the pointer, the underlying registers will remain unchanged.
-extern interrupt_handler
+extern isr_handler
 isr_common_stub:
     push eax
     push ecx
@@ -61,7 +61,7 @@ isr_common_stub:
     and esp, 0xFFFFFFF0 ; 16-byte align the stack.
     mov [esp], ebx
 
-    call interrupt_handler ; Trigger the C++ interrupt handler.
+    call isr_handler ; Trigger the C++ interrupt handler.
 
     mov esp, ebx
 
