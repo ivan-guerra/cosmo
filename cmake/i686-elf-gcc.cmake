@@ -33,7 +33,13 @@ set(CMAKE_STRIP         ${I686_TOOLCHAIN_PATH}i686-elf-strip${CMAKE_EXECUTABLE_S
 # These default C/C++ flags were lifted directly from the OSDev wiki:
 # https://wiki.osdev.org/Bare_Bones#Implementing_the_Kernel
 set(CMAKE_C_FLAGS   "-ffreestanding -O2 -Wall -Wextra" CACHE INTERNAL "")
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti" CACHE INTERNAL "")
+
+# TODO: We are using -fno-threadsafe-statics as a crutch with the assumption
+#       that our singleton object's (e.g., FrameBuffer) GetInstance() method
+#       will never be called from multiple threads of execution. We need
+#       to revisit this. See https://rowley.zendesk.com/hc/en-us/articles/210032823--Undefined-reference-to-cxa-guard-acquire-error-message
+#       for more details.
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -fno-threadsafe-statics" CACHE INTERNAL "")
 
 set(CMAKE_C_FLAGS_DEBUG     "-Os -g" CACHE INTERNAL "")
 set(CMAKE_C_FLAGS_RELEASE   "-Os -DNDEBUG" CACHE INTERNAL "")

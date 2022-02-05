@@ -70,8 +70,7 @@ void kbd::PrintAsciiChar(uint8_t scan_code)
         0  /* All other keys are undefined. */
     };
 
-    cosmo::FrameBuffer fb;
-    fb.PrintChar(kUsKeyboardLayout[scan_code]);
+    cosmo::FrameBuffer::GetInstance().PrintChar(kUsKeyboardLayout[scan_code]);
 }
 } // end irq
 } // end interrupt

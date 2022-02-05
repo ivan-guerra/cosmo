@@ -33,7 +33,13 @@ FrameBuffer::FrameBuffer(FrameBufferColor fg_color,
                          FrameBufferColor bg_color) :
     video_mem_(kFrameBufferAddress)
 {
-   attr_byte_ = (bg_color << 4) | (fg_color & 0x0F);
+    SetColor(fg_color, bg_color);
+}
+
+FrameBuffer& FrameBuffer::GetInstance()
+{
+    static FrameBuffer fb;
+    return fb;
 }
 
 void FrameBuffer::ClearScreen()

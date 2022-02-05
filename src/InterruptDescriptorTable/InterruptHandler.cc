@@ -9,15 +9,14 @@ namespace cosmo
 {
 void interrupt::isr_handler(struct InterruptContext* int_context)
 {
-    cosmo::FrameBuffer fb;
     cosmo::Logger logger;
-    logger.LogError(fb, "Exception %X occurred.",
+    logger.LogError(cosmo::FrameBuffer::GetInstance(),
+                    "Exception %X occurred.",
                     static_cast<unsigned int>(int_context->int_no));
 }
 
 void interrupt::irq_handler(struct InterruptContext* int_context)
 {
-    cosmo::FrameBuffer fb;
     cosmo::Logger logger;
     switch(int_context->int_no) {
         case Irq::kKeyboard:
@@ -25,7 +24,8 @@ void interrupt::irq_handler(struct InterruptContext* int_context)
             irq::kbd::PrintAsciiChar(irq::kbd::ReadScanCode());
             break;
         default:
-            logger.LogError(fb, "error, no handler for IRQ %d.",
+            logger.LogError(cosmo::FrameBuffer::GetInstance(),
+                            "error, no handler for IRQ %d.",
                             static_cast<int>(int_context->int_no));
     }
 }

@@ -9,10 +9,12 @@ namespace cosmo
  * \class FrameBuffer
  * \brief The FrameBuffer class models the VGA text mode screen buffer.
  *
- * FrameBuffer provides a handle by which the User's can output text to the
- * screen. FrameBuffer also allows the User to change the position of the on
- * screen cursor. A large portion of the implementation was lifted from this
- * tutorial:
+ * FrameBuffer is a singleton class due to the fact that we have only one
+ * VGA text buffer to write and do not want multiple instances of FrameBuffer
+ * colliding. FrameBuffer provides a handle by which the User's can output
+ * text to the screen. FrameBuffer also allows the User to change the position
+ * of the on screen cursor. A large portion of the implementation was lifted
+ * from this tutorial:
  * <a href="http://kernelx.weebly.com/text-console.html">Text Based Console</a>
  */
 class FrameBuffer
@@ -44,18 +46,6 @@ public:
         kWhite         = 15
     };
 
-    static const int kNumRows; /*!< Number of rows in the screen matrix. */
-    static const int kNumCols; /*!< Number of columns in the screen matrix. */
-
-    /*!
-     * \brief Constructs a FrameBuffer with the parameter FG and BG colors.
-     *
-     * \param fg_color Text foreground color.
-     * \param bg_color Text background color.
-     */
-    FrameBuffer(FrameBufferColor fg_color=FrameBufferColor::kWhite,
-                FrameBufferColor bg_color=FrameBufferColor::kBlack);
-
     /*!
      * \brief Default destruct the FrameBuffer.
      */
@@ -68,6 +58,20 @@ public:
     /* Default move construction and move assignment are allowed. */
     FrameBuffer(FrameBuffer&&) = default;
     FrameBuffer& operator=(FrameBuffer&&) = default;
+
+    /*!
+     * \brief Return the singleton instance of FrameBuffer.
+     */
+    static FrameBuffer& GetInstance();
+
+    /*!
+     * \brief Change the foreground/background color.
+     *
+     * \param fg_color Text foreground color.
+     * \param bg_color Text background color.
+     */
+    void SetColor(FrameBufferColor fg_color, FrameBufferColor bg_color)
+        { attr_byte_ = (bg_color << 4) | (fg_color & 0x0F); }
 
     /*!
      * \brief Clear the screen of all text and reset the cursor to the origin.
@@ -103,6 +107,16 @@ public:
     template <typename T>
     void PrintString(T* str, size_t len);
 
+protected:
+    /*!
+     * \brief Constructs a FrameBuffer with the parameter FG and BG colors.
+     *
+     * \param fg_color Text foreground color.
+     * \param bg_color Text background color.
+     */
+    FrameBuffer(FrameBufferColor fg_color=FrameBufferColor::kWhite,
+                FrameBufferColor bg_color=FrameBufferColor::kBlack);
+
 private:
     /*!
      * \enum FrameBuffer::FrameBufferIOCmd
@@ -136,6 +150,8 @@ private:
         int y = 0; /*!< Cursor row index. */
     };
 
+    static const int kNumRows; /*!< Number of rows in the screen matrix. */
+    static const int kNumCols; /*!< Number of columns in the screen matrix. */
     static uint16_t* kFrameBufferAddress; /*!< VGA memory start address. */
 
     /*!
