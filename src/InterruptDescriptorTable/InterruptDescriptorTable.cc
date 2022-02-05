@@ -10,7 +10,7 @@ InterruptDescriptorTable::InterruptDescriptorTable()
     idtr_.base  = reinterpret_cast<uintptr_t>(&idt_entries_[0]);
     idtr_.limit = (sizeof(IdtEntry) * kMaxIdtEntries) - 1;
 
-    /* Register the 32 exception handlers. See ExceptionHandler.[h,cc,nasm]
+    /* Register 32 ISR handlers. See InterruptHandler.[h,cc,nasm]
        for details. */
     SetGate(0,  reinterpret_cast<uintptr_t>(interrupt::isr0));
     SetGate(1,  reinterpret_cast<uintptr_t>(interrupt::isr1));
@@ -45,8 +45,27 @@ InterruptDescriptorTable::InterruptDescriptorTable()
     SetGate(30, reinterpret_cast<uintptr_t>(interrupt::isr30));
     SetGate(31, reinterpret_cast<uintptr_t>(interrupt::isr31));
 
+    /* Register 16 IRQ handlers. See InterruptHandler.[h,cc,nasm]
+       for details. */
+    SetGate(32, reinterpret_cast<uintptr_t>(interrupt::irq0));
+    SetGate(33, reinterpret_cast<uintptr_t>(interrupt::irq1));
+    SetGate(34, reinterpret_cast<uintptr_t>(interrupt::irq2));
+    SetGate(35, reinterpret_cast<uintptr_t>(interrupt::irq3));
+    SetGate(36, reinterpret_cast<uintptr_t>(interrupt::irq4));
+    SetGate(37, reinterpret_cast<uintptr_t>(interrupt::irq5));
+    SetGate(38, reinterpret_cast<uintptr_t>(interrupt::irq6));
+    SetGate(39, reinterpret_cast<uintptr_t>(interrupt::irq7));
+    SetGate(40, reinterpret_cast<uintptr_t>(interrupt::irq8));
+    SetGate(41, reinterpret_cast<uintptr_t>(interrupt::irq9));
+    SetGate(42, reinterpret_cast<uintptr_t>(interrupt::irq10));
+    SetGate(43, reinterpret_cast<uintptr_t>(interrupt::irq11));
+    SetGate(44, reinterpret_cast<uintptr_t>(interrupt::irq12));
+    SetGate(45, reinterpret_cast<uintptr_t>(interrupt::irq13));
+    SetGate(46, reinterpret_cast<uintptr_t>(interrupt::irq14));
+    SetGate(47, reinterpret_cast<uintptr_t>(interrupt::irq15));
+
     /* Mark remaining interrupt vectors as disabled/undefined. */
-    for (int i = 32; i < kMaxIdtEntries; ++i)
+    for (int i = 48; i < kMaxIdtEntries; ++i)
         enabled_vectors_[i] = false;
 }
 

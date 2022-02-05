@@ -39,7 +39,7 @@ public:
      * \brief Construct an IDT with entries 0-31 pre-populated.
      *
      * InterruptDescriptorTable() registers the 32 Intel mandated CPU exception
-     * handlers.
+     * handlers as well as 16 default IRQ handlers.
      */
     InterruptDescriptorTable();
     ~InterruptDescriptorTable() = default;

@@ -121,3 +121,92 @@ ISR_NOERRCODE 28
 ISR_NOERRCODE 29
 ISR_ERRCODE   30
 ISR_NOERRCODE 31
+
+; We repeat the process shown above for ISR handling only here we are setting
+; ourselves up to handle IRQs.
+
+%macro IRQ_HANDLER 1
+  [GLOBAL irq%1]
+  irq%1:
+    cli
+    push byte 0
+    push byte %1
+    jmp irq_common_stub
+%endmacro
+
+extern irq_handler
+irq_common_stub:
+    push eax
+    push ecx
+    push edx
+    push ebx
+    push ebp
+    push esi
+    push edi
+
+    mov ebp, ds
+    push ebp
+    mov ebp, es
+    push ebp
+    mov ebp, fs
+    push ebp
+    mov ebp, gs
+    push ebp
+
+    mov ebp, 0x10
+    mov ds, ebp
+    mov es, ebp
+    mov fs, ebp
+    mov gs, ebp
+
+    mov ebp, cr2
+    push ebp
+
+    mov ebx, esp
+    sub esp, 4
+    and esp, 0xFFFFFFF0 ; 16-byte align the stack.
+    mov [esp], ebx
+
+    call irq_handler ; Trigger the C++ IRQ handler.
+
+    mov esp, ebx
+
+    pop ebp
+    mov cr2, ebp
+
+    pop ebp
+    mov gs, ebp
+    pop ebp
+    mov fs, ebp
+    pop ebp
+    mov es, ebp
+    pop ebp
+    mov ds, ebp
+
+    pop edi
+    pop esi
+    pop ebp
+    pop ebx
+    pop edx
+    pop ecx
+    pop eax
+
+    add esp, 8
+    iret
+
+IRQ_HANDLER 0
+IRQ_HANDLER 1
+IRQ_HANDLER 2
+IRQ_HANDLER 3
+IRQ_HANDLER 4
+IRQ_HANDLER 5
+IRQ_HANDLER 6
+IRQ_HANDLER 7
+IRQ_HANDLER 8
+IRQ_HANDLER 9
+IRQ_HANDLER 10
+IRQ_HANDLER 11
+IRQ_HANDLER 12
+IRQ_HANDLER 13
+IRQ_HANDLER 14
+IRQ_HANDLER 15
