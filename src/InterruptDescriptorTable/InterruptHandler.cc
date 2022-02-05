@@ -3,6 +3,7 @@
 #include "ProgrammableInterruptController.h"
 #include "Logger.h"
 #include "FrameBuffer.h"
+#include "IRQ/Keyboard/KeyboardIrq.h"
 
 namespace cosmo
 {
@@ -18,16 +19,13 @@ void interrupt::irq_handler(struct InterruptContext* int_context)
 {
     cosmo::FrameBuffer fb;
     cosmo::Logger logger;
-    /* TODO: Implement a complete switch statement. */
-    static int i = 0;
     switch(int_context->int_no) {
         case Irq::kKeyboard:
-            i++;
-            logger.LogError(fb, "KBD Interrupt %d occurred.", i);
-            cosmo::Pic::SendEOI(1);
+            /* Print the ASCII character that corresponds to the keypress. */
+            irq::kbd::PrintAsciiChar(irq::kbd::ReadScanCode());
             break;
         default:
-            logger.LogError(fb, "IRQ %d occurred.",
+            logger.LogError(fb, "error, no handler for IRQ %d.",
                             static_cast<int>(int_context->int_no));
     }
 }

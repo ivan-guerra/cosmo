@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME}
         InterruptHandler.nasm
         FlushIDT.nasm
         InterruptDescriptorTable.cc
+        "${CMAKE_CURRENT_SOURCE_DIR}/IRQ/Keyboard/KeyboardIrq.cc"
 )
 
 target_include_directories(${PROJECT_NAME}
