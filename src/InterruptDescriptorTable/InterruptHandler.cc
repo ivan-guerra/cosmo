@@ -2,7 +2,9 @@
 #include "Logger.h"
 #include "FrameBuffer.h"
 
-void interrupt_handler(struct InterruptContext* int_context)
+namespace cosmo
+{
+void interrupt::interrupt_handler(struct InterruptContext* int_context)
 {
     cosmo::FrameBuffer fb;
     fb.ClearScreen();
@@ -11,3 +13,4 @@ void interrupt_handler(struct InterruptContext* int_context)
     logger.LogError(fb, "Exception %X occurred.",
                     static_cast<unsigned int>(int_context->int_no));
 }
+} // end cosmo

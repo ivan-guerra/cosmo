@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+namespace cosmo
+{
+namespace interrupt
+{
 /*!
  * \struct CPURegisters
  *
@@ -69,3 +73,5 @@ extern "C" void isr28();
 extern "C" void isr29();
 extern "C" void isr30();
 extern "C" void isr31();
+} // end interrupt
+} // end cosmo
