@@ -36,6 +36,7 @@ target_link_libraries(${PROJECT_NAME}
         SerialPort
         GlobalDescriptorTable
         InterruptDescriptorTable
+        ProgrammableInterruptController
 )
 
 set(KERNEL_INSTALL_DIR "${CMAKE_SOURCE_DIR}/iso/boot")

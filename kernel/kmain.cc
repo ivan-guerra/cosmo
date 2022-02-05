@@ -1,5 +1,7 @@
 #include "GlobalDescriptorTable.h"
 #include "InterruptDescriptorTable.h"
+#include "InterruptHandler.h"
+#include "ProgrammableInterruptController.h"
 
 extern "C" int kernel_main(void)
 {
@@ -13,11 +15,29 @@ extern "C" int kernel_main(void)
     gdt.FlushGdt();
 
     cosmo::InterruptDescriptorTable idt;
-    /* TODO: Register ISRs. */
+    /* Register any additional interrupt vectors here with calls to
+       idt.SetGate(...). */
     idt.FlushIdt();
 
-    __asm__ volatile ("int $0x3");
-    __asm__ volatile ("int $0x10");
+    /* The IDT has been setup and registered. Enable interrupts. */
+    __asm__ volatile("sti");
 
+    /* Remap the master/slave PIC to have the correct vector offsets. */
+    cosmo::pic::Init();
+
+    for (uint8_t i = 0; i < 8; ++i) {
+        /* Mask all IRQs. Note, we even mask IRQ 2 which corresponds to the
+           slave PIC effectively masking all slave IRQs. */
+        cosmo::pic::SetMask(i);
+    }
+
+    /* Clear the mask on the keyboard IRQ. */
+    cosmo::pic::ClearMask(cosmo::interrupt::Irq::kKeyboard);
+
+    /* Keep the kernel from exiting. */
+    for(;;)
+        __asm__ volatile("hlt");
+
+    /* Should never make it here... */
     return 0;
 }
