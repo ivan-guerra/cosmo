@@ -26,8 +26,8 @@ class GlobalDescriptorTable
 public:
     /*!
      * \struct GdtEntry
+     * \brief This struct defines the contents of a GDT entry.
      *
-     * This struct defines the contents of a GDT entry.
      * See Section 3.4.5 of the
      * <a href="https://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-vol-3a-part-1-manual.html/">
      * Intel Manual</a> for details.
@@ -91,8 +91,7 @@ public:
 private:
     /*!
      * \struct GdtRegister
-     *
-     * This struct defines the base address and limit of the GDT.
+     * \brief This struct defines the base address and limit of the GDT.
      */
     struct __attribute__((packed)) GdtRegister
     {

@@ -11,7 +11,7 @@ namespace cosmo
  *
  * FrameBuffer is a singleton class due to the fact that we have only one
  * VGA text buffer to write and do not want multiple instances of FrameBuffer
- * colliding. FrameBuffer provides a handle by which the User's can output
+ * colliding. FrameBuffer provides a handle by which the User can output
  * text to the screen. FrameBuffer also allows the User to change the position
  * of the on screen cursor. A large portion of the implementation was lifted
  * from this tutorial:
@@ -127,7 +127,7 @@ private:
     {
         kHighByteCommand = 14, /*!< Framebuffer high byte command. */
         kLowByteCommand  = 15  /*!< Framebuffer low byte command. */
-    };
+    }; // end FrameBufferIOCmd
 
     /*!
      * \enum Framebuffer::FrameBufferIOPort
@@ -138,17 +138,17 @@ private:
     {
         kCommandPort = 0x3D4, /*!< Framebuffer command port address. */
         kDataPort    = 0x3D5  /*!< Framebuffer data port address. */
-    };
+    }; // end FrameBufferIOPort
 
     /*!
-     * \struct Framebuffer::CursorPos
+     * \struct CursorPos
      * \brief The CursorPos struct contains the position of the cursor.
      */
     struct CursorPos
     {
         int x = 0; /*!< Cursor column index. */
         int y = 0; /*!< Cursor row index. */
-    };
+    }; // end CursorPos
 
     static const int kNumRows; /*!< Number of rows in the screen matrix. */
     static const int kNumCols; /*!< Number of columns in the screen matrix. */

@@ -4,11 +4,16 @@
 
 namespace cosmo
 {
+/*!
+ * \namespace interrupt
+ * \brief ISR and IRQ handler types and functions.
+ */
 namespace interrupt
 {
 
 /*!
- * This enum aliases the IRQ types that can be emitted by the PIC master/slave.
+ * \enum Irq
+ * \brief IRQ types that can be emitted by the PIC master/slave.
  */
 enum Irq
 {
@@ -32,9 +37,8 @@ enum Irq
 }; // end Irq
 
 /*!
- * \struct CPURegisters
- *
- * On interrupt, this struct stores the CPU register context.
+ * \struct InterruptContext
+ * \brief This struct stores the CPU register context.
  */
 struct InterruptContext
 {

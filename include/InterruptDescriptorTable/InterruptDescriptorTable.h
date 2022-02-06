@@ -21,8 +21,7 @@ class InterruptDescriptorTable
 public:
     /*!
      * \struct IdtEntry
-     *
-     * This struct defines the contents of an IDT entry.
+     * \brief This struct defines the contents of an IDT entry.
      */
     struct __attribute__((packed)) IdtEntry
     {
@@ -85,8 +84,7 @@ public:
 private:
     /*!
      * \struct IdtRegister
-     *
-     * This struct defines the base address and limit of the IDT.
+     * \brief This struct defines the base address and limit of the IDT.
      */
     struct __attribute__((packed)) IdtRegister
     {
