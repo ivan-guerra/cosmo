@@ -347,6 +347,7 @@ void Logger::Printf(T& writer, const char* fmt, const Arg* args)
                 arg_index++;
                 writer.PrintString(log_buffer_, LogBufferLen());
                 break;
+            case 'x':
             case 'X':
                 SetLogBufferHex(args[arg_index].GetValue<unsigned int>());
                 arg_index++;
