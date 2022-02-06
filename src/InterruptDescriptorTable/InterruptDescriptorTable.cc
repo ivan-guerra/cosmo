@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 
 #include "InterruptHandler.h"
 #include "InterruptDescriptorTable.h"
@@ -9,6 +10,9 @@ InterruptDescriptorTable::InterruptDescriptorTable()
 {
     idtr_.base  = reinterpret_cast<uintptr_t>(&idt_entries_[0]);
     idtr_.limit = (sizeof(IdtEntry) * kMaxIdtEntries) - 1;
+
+    /* Zero out the IDT entry fields. */
+    memset(idt_entries_, 0, sizeof(IdtEntry) * kMaxIdtEntries);
 
     /* Register 32 ISR handlers. See InterruptHandler.[h,cc,nasm]
        for details. */

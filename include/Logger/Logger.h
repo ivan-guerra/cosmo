@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "FrameBuffer.h"
 #include "SerialPort.h"
@@ -28,7 +29,7 @@ namespace cosmo
 class Logger
 {
 public:
-    Logger();
+    Logger() { memset(log_buffer_, '\0', kLogBufferSize); }
     ~Logger() = default;
 
     /* Default copy construction and copy assignment are allowed. */
@@ -166,7 +167,8 @@ private:
         /*!
          * \brief Construct a const char* Arg.
          */
-        Arg(const char* value);
+        Arg(const char* value)
+            { memcpy(str_buffer_, value, strlen(value) + 1); }
 
         ~Arg() = default;
 
@@ -195,16 +197,7 @@ private:
          */
         template <typename T>
         T GetValue() const;
-
-        /*!
-         * \brief Return the length of the string stored in str_buffer_.
-         */
-        size_t GetStrLen() const;
-
-        /*!
-         * \brief Return a pointer to the buffered string argument.
-         */
-        const char* GetStr() const { return str_buffer_; }
+        const char* GetValue() const { return str_buffer_; }
 
     private:
         static const int kStrBufferSize = 256; /*!< String buffer size. */
@@ -219,11 +212,6 @@ private:
     }; // end Arg
 
     static const int kLogBufferSize = 64; /*!< Logger scratch space size. */
-
-    /*!
-     * \brief Return the length of the C-style string in #log_buffer_.
-     */
-    size_t LogBufferLen() const;
 
     /*!
      * \brief Reverse the data from index i to j in #log_buffer_ (inclusive).
@@ -340,22 +328,22 @@ void Logger::Printf(T& writer, const char* fmt, const Arg* args)
             case 'd':
                 SetLogBuffer(args[arg_index].GetValue<int>());
                 arg_index++;
-                writer.PrintString(log_buffer_, LogBufferLen());
+                writer.PrintString(log_buffer_, strlen(log_buffer_));
                 break;
             case 'u':
                 SetLogBuffer(args[arg_index].GetValue<unsigned int>());
                 arg_index++;
-                writer.PrintString(log_buffer_, LogBufferLen());
+                writer.PrintString(log_buffer_, strlen(log_buffer_));
                 break;
             case 'x':
             case 'X':
                 SetLogBufferHex(args[arg_index].GetValue<unsigned int>());
                 arg_index++;
-                writer.PrintString(log_buffer_, LogBufferLen());
+                writer.PrintString(log_buffer_, strlen(log_buffer_));
                 break;
             case 's':
-                writer.PrintString(args[arg_index].GetStr(),
-                                   args[arg_index].GetStrLen());
+                writer.PrintString(args[arg_index].GetValue(),
+                                   strlen(args[arg_index].GetValue()));
                 arg_index++;
                 break;
         }

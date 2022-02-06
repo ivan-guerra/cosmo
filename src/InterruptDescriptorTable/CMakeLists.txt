@@ -35,4 +35,5 @@ target_link_libraries(${PROJECT_NAME}
         SerialPort
         Logger
         ProgrammableInterruptController
+        libc
 )

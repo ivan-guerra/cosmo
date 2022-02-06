@@ -100,8 +100,8 @@ private:
         uint32_t base;  /*! The address of the first descriptor. */
     }; // end GdtRegister
 
-    struct GdtRegister gdtr_;      /*!< GDT register. */
-    struct GdtEntry gdt_entries_[N]; /*!< GDT entries. */
+    struct GdtRegister gdtr_;           /*!< GDT register. */
+    struct GdtEntry    gdt_entries_[N]; /*!< GDT entries. */
 }; // end GlobalDescriptorTable
 
 template <size_t N>

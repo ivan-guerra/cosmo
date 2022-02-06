@@ -37,6 +37,7 @@ target_link_libraries(${PROJECT_NAME}
         GlobalDescriptorTable
         InterruptDescriptorTable
         ProgrammableInterruptController
+        libc
 )
 
 set(KERNEL_INSTALL_DIR "${CMAKE_SOURCE_DIR}/iso/boot")

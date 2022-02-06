@@ -2,34 +2,6 @@
 
 namespace cosmo
 {
-Logger::Arg::Arg(const char* value) :
-    type_(Logger::Arg::DataType::kStr)
-{
-    /* Copy value to the Arg string buffer. */
-    int i = 0;
-    for (; value[i] != '\0'; ++i)
-        str_buffer_[i] = value[i];
-    str_buffer_[i] = '\0';
-}
-
-size_t Logger::Arg::GetStrLen() const
-{
-    unsigned int len = 0;
-    for (int i = 0; str_buffer_[i] != '\0'; ++i)
-        len++;
-
-    return len;
-}
-
-size_t Logger::LogBufferLen() const
-{
-    unsigned int len = 0;
-    for (int i = 0; log_buffer_[i] != '\0'; ++i)
-        len++;
-
-    return len;
-}
-
 void Logger::LogBufferReverse(int i, int j)
 {
     for (; i < j; i++, j--) {
@@ -129,12 +101,5 @@ int Logger::SetLogBufferHex(unsigned int n)
     LogBufferReverse(0, i - 1);
 
     return i;
-}
-
-Logger::Logger()
-{
-    /* Initialize the log buffer with NULL terminators. */
-    for (int i = 0; i < kLogBufferSize; ++i)
-        log_buffer_[i] = '\0';
 }
 } // end cosmo
