@@ -18,3 +18,6 @@ scripts/bochs_logs
 
 # Ignore the Vim Syntastic plugin's CPP config.
 .syntastic_cpp_config
+
+# Ignore the ctags tag file.
+tags
