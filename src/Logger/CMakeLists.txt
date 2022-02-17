@@ -14,6 +14,10 @@ target_include_directories(${PROJECT_NAME}
 target_compile_options(${PROJECT_NAME}
     PRIVATE
         -Werror
+    INTERFACE
+        # Adding this to remove warning issued when logging fmt strings with
+        # no arguments.
+        -Wno-unused-value
 )
 
 target_compile_features(${PROJECT_NAME}
