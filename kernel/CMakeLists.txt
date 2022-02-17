@@ -7,6 +7,12 @@ project(kernel.elf VERSION 1.0
 
 # Creation of the 32-bit kernel ELF.
 add_executable(${PROJECT_NAME} kmain.cc loader.nasm)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        "${COSMO_INCLUDE_DIR}/Boot"
+)
+
 target_compile_options(${PROJECT_NAME}
     PRIVATE
         -Werror

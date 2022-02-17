@@ -1,10 +1,42 @@
+#include <stdint.h>
+
+#include "Logger.h"
+#include "FrameBuffer.h"
+#include "multiboot.h"
 #include "GlobalDescriptorTable.h"
 #include "InterruptDescriptorTable.h"
 #include "InterruptHandler.h"
 #include "ProgrammableInterruptController.h"
 
-extern "C" int kernel_main(void)
+void Halt()
 {
+    for (;;)
+        __asm__ volatile("hlt");
+}
+
+extern "C" int kernel_main(uint32_t mboot_magic, uint32_t mboot_header)
+{
+    cosmo::Logger log;
+
+    if (mboot_magic != MULTIBOOT_BOOTLOADER_MAGIC) {
+        log.LogError(cosmo::FrameBuffer::GetInstance(),
+            "error: not booted by a Multiboot compliant bootloader!\n");
+        Halt();
+    }
+
+    /* Cast the pointer to a multiboot_info_t struct pointer. */
+    multiboot_info_t* mboot_hdr =
+        reinterpret_cast<multiboot_info_t*>(mboot_header);
+
+    /* The specification states that bit 6 signifies the presence of the memory
+       map. We can check the header flags to see if it's there */
+    if ((mboot_hdr->flags & (1<<6)) == 0) {
+        /* The memory map is not present, we should probably halt the system. */
+        log.LogError(cosmo::FrameBuffer::GetInstance(),
+            "error: no Multiboot memory map was provided!\n");
+        Halt();
+    }
+
     /* Setup the GDT. */
     cosmo::GlobalDescriptorTable<5> gdt;
     gdt.SetGate(0, 0, 0, 0, 0);                /* Null segment. */
@@ -35,8 +67,7 @@ extern "C" int kernel_main(void)
     cosmo::pic::ClearMask(cosmo::interrupt::Irq::kKeyboard);
 
     /* Keep the kernel from exiting. */
-    for(;;)
-        __asm__ volatile("hlt");
+    Halt();
 
     /* Should never make it here... */
     return 0;
