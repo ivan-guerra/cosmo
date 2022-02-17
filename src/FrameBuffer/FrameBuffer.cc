@@ -6,7 +6,7 @@ namespace cosmo
 const int FrameBuffer::kNumRows = 25;
 const int FrameBuffer::kNumCols = 80;
 uint16_t* FrameBuffer::kFrameBufferAddress =
-    reinterpret_cast<uint16_t*>(0x000B8000);
+    reinterpret_cast<uint16_t*>(0xC00B8000);
 
 void FrameBuffer::ScrollScreen()
 {
