@@ -1,12 +1,12 @@
 #include <stdint.h>
 
 #include "Logger.h"
-#include "FrameBuffer.h"
 #include "multiboot.h"
 #include "GlobalDescriptorTable.h"
 #include "InterruptDescriptorTable.h"
 #include "InterruptHandler.h"
 #include "ProgrammableInterruptController.h"
+#include "PhysicalFrameAllocator.h"
 
 void Halt()
 {
@@ -14,13 +14,16 @@ void Halt()
         __asm__ volatile("hlt");
 }
 
-extern "C" int kernel_main(uint32_t mboot_magic, uint32_t mboot_header)
+extern "C" int kernel_main(uint32_t kernel_physical_start,
+                           uint32_t kernel_physical_end,
+                           uint32_t kernel_virtual_start,
+                           uint32_t kernel_virtual_end,
+                           uint32_t kernel_virtual_base,
+                           uint32_t mboot_magic,
+                           uint32_t mboot_header)
 {
-    cosmo::Logger log;
-
     if (mboot_magic != MULTIBOOT_BOOTLOADER_MAGIC) {
-        log.LogError(cosmo::FrameBuffer::GetInstance(),
-            "error: not booted by a Multiboot compliant bootloader!\n");
+        LOG_ERROR("error, not booted by a Multiboot compliant bootloader!\n");
         Halt();
     }
 
@@ -28,12 +31,8 @@ extern "C" int kernel_main(uint32_t mboot_magic, uint32_t mboot_header)
     multiboot_info_t* mboot_hdr =
         reinterpret_cast<multiboot_info_t*>(mboot_header);
 
-    /* The specification states that bit 6 signifies the presence of the memory
-       map. We can check the header flags to see if it's there */
-    if ((mboot_hdr->flags & (1<<6)) == 0) {
-        /* The memory map is not present, we should probably halt the system. */
-        log.LogError(cosmo::FrameBuffer::GetInstance(),
-            "error: no Multiboot memory map was provided!\n");
+    if (!(mboot_hdr->flags & MULTIBOOT_INFO_MEMORY)) {
+        LOG_ERROR("error, multiboot header does not contain meminfo!\n");
         Halt();
     }
 
@@ -65,6 +64,26 @@ extern "C" int kernel_main(uint32_t mboot_magic, uint32_t mboot_header)
 
     /* Clear the mask on the keyboard IRQ. */
     cosmo::pic::ClearMask(cosmo::interrupt::Irq::kKeyboard);
+
+    /* Virtual memory management playground. */
+    struct cosmo::vmem::KernelDescriptor kernel_desc = {
+        .kernel_physical_start = kernel_physical_start,
+        .kernel_physical_end   = kernel_physical_end,
+        .kernel_virtual_start  = kernel_virtual_start,
+        .kernel_virtual_end    = kernel_virtual_end,
+        .kernel_virtual_base   = kernel_virtual_base
+    };
+    size_t mem_size_kb = 1024 + mboot_hdr->mem_upper;
+
+    auto& falloc = cosmo::vmem::PhysicalFrameAllocator::GetInstance();
+    falloc.Init(mboot_hdr,
+                kernel_physical_end,
+                mem_size_kb,
+                kernel_desc);
+    unsigned i = 0;
+    while (falloc.AllocFrame())
+        i++;
+    LOG_DEBUG("Num Allocs = %u\n", i);
 
     /* Keep the kernel from exiting. */
     Halt();

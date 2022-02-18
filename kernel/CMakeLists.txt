@@ -44,6 +44,7 @@ target_link_libraries(${PROJECT_NAME}
         InterruptDescriptorTable
         ProgrammableInterruptController
         libc
+        PhysicalFrameAllocator
 )
 
 set(KERNEL_INSTALL_DIR "${CMAKE_SOURCE_DIR}/iso/boot")

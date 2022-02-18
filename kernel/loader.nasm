@@ -102,7 +102,9 @@ StartInHigherHalf:
     ; Pass the Multiboot magic value.
     push eax
 
-    ; Push kernel mem start/end addresses.
+    ; Push kernel base, start, and end addresses.
+    mov eax, KERNEL_VIRTUAL_BASE
+    push eax
     push _kernel_virtual_end
     push _kernel_virtual_start
     push _kernel_physical_end
