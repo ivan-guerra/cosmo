@@ -102,4 +102,10 @@ int Logger::SetLogBufferHex(unsigned int n)
 
     return i;
 }
+
+Logger& Logger::GetInstance()
+{
+    static Logger log;
+    return log;
+}
 } // end cosmo

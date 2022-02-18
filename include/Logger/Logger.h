@@ -7,17 +7,45 @@
 #include "FrameBuffer.h"
 #include "SerialPort.h"
 
+#define LOG_INFO(fmt, ...) \
+    cosmo::Logger::GetInstance().LogInfo(\
+        cosmo::FrameBuffer::GetInstance(), fmt, ##__VA_ARGS__)
+
+#define LOG_WARN(fmt, ...) \
+    cosmo::Logger::GetInstance().LogWarn(\
+        cosmo::FrameBuffer::GetInstance(), fmt, ##__VA_ARGS__)
+
+#define LOG_ERROR(fmt, ...) \
+    cosmo::Logger::GetInstance().LogError(\
+        cosmo::FrameBuffer::GetInstance(), fmt, ##__VA_ARGS__)
+
+#define LOG_DEBUG(fmt, ...) \
+    cosmo::Logger::GetInstance().LogDebug(\
+        cosmo::FrameBuffer::GetInstance(), fmt, ##__VA_ARGS__)
+
+#define LOG_INFO_SER(com, fmt, ...) \
+    cosmo::Logger::GetInstance().LogInfo(com, fmt, ##__VA_ARGS__)
+
+#define LOG_WARN_SER(com, fmt, ...) \
+    cosmo::Logger::GetInstance().LogWarn(com, fmt, ##__VA_ARGS__)
+
+#define LOG_ERROR_SER(com, fmt, ...) \
+    cosmo::Logger::GetInstance().LogError(com, fmt, ##__VA_ARGS__)
+
+#define LOG_DEBUG_SER(com, fmt, ...) \
+    cosmo::Logger::GetInstance().LogDebug(com, fmt, ##__VA_ARGS__)
+
 namespace cosmo
 {
 /*!
  * \class Logger
  * \brief The Logger class allows logging to the screen or COM ports.
  *
- * Logger provides a handle by which the User can log to the VGA framebuffer or
- * the serial COM ports. The Logger interface defines four log levels:
- * INFO, WARN, ERROR, and DEBUG. When outputting messages at any level, the
- * User can use printf style syntax to output formatted strings. Logger only
- * provides a small subset of the format specifiers and functionality of
+ * Logger exposes the LOG_<LOG_LEVEL>_* macros by which a User can log messages
+ * to the VGA framebuffer or the serial COM ports. Logger defines four log
+ * levels: INFO, WARN, ERROR, and DEBUG. When outputting messages at any level,
+ * the User can use printf style syntax to output formatted strings. Logger
+ * only provides a small subset of the format specifiers and functionality of
  * normal printf. The format specifiers have the dumbed down form %[flag]
  * with the following flags supported:\n\n
  *
@@ -29,7 +57,6 @@ namespace cosmo
 class Logger
 {
 public:
-    Logger() { memset(log_buffer_, '\0', kLogBufferSize); }
     ~Logger() = default;
 
     /* Default copy construction and copy assignment are allowed. */
@@ -39,6 +66,11 @@ public:
     /* Default move construction and move assignment are allowed. */
     Logger(Logger&&) = default;
     Logger& operator=(Logger&&) = default;
+
+    /*!
+     * \brief Return the singleton instance of Logger.
+     */
+    static Logger& GetInstance();
 
     /*!
      * \brief Log information level data.
@@ -212,6 +244,8 @@ private:
     }; // end Arg
 
     static const int kLogBufferSize = 64; /*!< Logger scratch space size. */
+
+    Logger() { memset(log_buffer_, '\0', kLogBufferSize); }
 
     /*!
      * \brief Reverse the data from index i to j in #log_buffer_ (inclusive).
