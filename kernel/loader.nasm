@@ -7,6 +7,12 @@
 global _loader     ; Make entry point visible to linker.
 extern kernel_main ; kernel_main is defined in kmain.cc.
 
+; See kernel/link.ld for symbol definitions.
+extern _kernel_physical_start
+extern _kernel_physical_end
+extern _kernel_virtual_start
+extern _kernel_virtual_end
+
 ; Setting up the Multiboot header - see GRUB docs for details.
 MODULEALIGN equ  1<<0                  ; Align loaded modules on page boundaries.
 MEMINFO     equ  1<<1                  ; Provide memory map.
@@ -95,6 +101,12 @@ StartInHigherHalf:
 
     ; Pass the Multiboot magic value.
     push eax
+
+    ; Push kernel mem start/end addresses.
+    push _kernel_virtual_end
+    push _kernel_virtual_start
+    push _kernel_physical_end
+    push _kernel_physical_start
 
     call  kernel_main ; Call kernel proper.
     hlt               ; Halt machine should kernel return.
