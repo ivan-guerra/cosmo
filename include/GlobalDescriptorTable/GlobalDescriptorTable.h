@@ -12,9 +12,9 @@ namespace cosmo
  * \brief The GlobalDescriptorTable class implements GDT setup.
  *
  * GlobalDescriptorTable provides a handle by which the User can setup the
- * global descriptor table (GDT). This is a template class accepting one
- * template parameter, \a N, which specifies how many entries the GDT shall
- * hold. The meat of the GDT setup code was taken from
+ * global descriptor table (GDT). This is a singletong template class
+ * accepting one template parameter, \a N, which specifies how many entries
+ * the GDT shall hold. The meat of the GDT setup code was taken from
  * <a href="http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html">
  * James Malloy's Kernel Development Tutorial</a>.
  *
@@ -42,10 +42,6 @@ public:
         uint8_t  base_high;   /*! Last 8 bits of the base. */
     }; // end GdtEntry
 
-    /*!
-     * \brief Set the GDT base address and table limit.
-     */
-    GlobalDescriptorTable();
     ~GlobalDescriptorTable() = default;
 
     /* Disable copy construction and copy assignment. */
@@ -61,6 +57,11 @@ public:
      */
     const GdtEntry& operator[](int i) const { return gdt_entries_[i]; }
     GdtEntry& operator[](int i) { return gdt_entries_[i]; }
+
+    /*!
+     * \brief Return the singleton instance of the GDT.
+     */
+    static GlobalDescriptorTable& GetInstance();
 
     /*!
      * \brief Configure the segment descriptor.
@@ -99,6 +100,11 @@ private:
         uint32_t base;  /*! The address of the first descriptor. */
     }; // end GdtRegister
 
+    /*!
+     * \brief Set the GDT base address and table limit.
+     */
+    GlobalDescriptorTable();
+
     struct GdtRegister gdtr_;           /*!< GDT register. */
     struct GdtEntry    gdt_entries_[N]; /*!< GDT entries. */
 }; // end GlobalDescriptorTable
@@ -108,6 +114,13 @@ GlobalDescriptorTable<N>::GlobalDescriptorTable()
 {
     gdtr_.limit = (sizeof(GdtEntry) * N) - 1;
     gdtr_.base  = reinterpret_cast<uintptr_t>(&gdt_entries_);
+}
+
+template <size_t N>
+GlobalDescriptorTable<N>& GlobalDescriptorTable<N>::GetInstance()
+{
+    static GlobalDescriptorTable<N> gdt;
+    return gdt;
 }
 
 template <size_t N>

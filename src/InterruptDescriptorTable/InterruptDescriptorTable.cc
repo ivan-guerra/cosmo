@@ -73,6 +73,12 @@ InterruptDescriptorTable::InterruptDescriptorTable()
         enabled_vectors_[i] = false;
 }
 
+InterruptDescriptorTable& InterruptDescriptorTable::GetInstance()
+{
+    static InterruptDescriptorTable idt;
+    return idt;
+}
+
 void InterruptDescriptorTable::SetGate(uint8_t vector, uint32_t isr,
                                        uint16_t selector, uint8_t flags)
 {

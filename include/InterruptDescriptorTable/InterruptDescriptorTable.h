@@ -34,13 +34,6 @@ public:
 
     static const int kMaxIdtEntries = 256; /*!< Max number of entries allowed in the IDT. */
 
-    /*!
-     * \brief Construct an IDT with entries 0-31 pre-populated.
-     *
-     * InterruptDescriptorTable() registers the 32 Intel mandated CPU exception
-     * handlers as well as 16 default IRQ handlers.
-     */
-    InterruptDescriptorTable();
     ~InterruptDescriptorTable() = default;
 
     /* Disable copy construction and copy assignment. */
@@ -50,6 +43,11 @@ public:
     /* Disable move construction and move assignment. */
     InterruptDescriptorTable(InterruptDescriptorTable&&) = delete;
     InterruptDescriptorTable& operator=(InterruptDescriptorTable&&) = delete;
+
+    /*!
+     * \brief Return the singleton instance of InterruptDescriptorTable.
+     */
+    static InterruptDescriptorTable& GetInstance();
 
     /*!
      * \brief Return \c true if an interrupt vector has been initialized.
@@ -91,6 +89,14 @@ private:
         uint16_t limit; /*!< IDT table limit. */
         uint32_t base;  /*!< Address of base IDT entry. */
     }; // end IdtRegister
+
+    /*!
+     * \brief Construct an IDT with entries 0-31 pre-populated.
+     *
+     * InterruptDescriptorTable() registers the 32 Intel mandated CPU exception
+     * handlers as well as 16 default IRQ handlers.
+     */
+    InterruptDescriptorTable();
 
     struct IdtRegister idtr_;                            /*!< IDT register. */
     struct IdtEntry    idt_entries_[kMaxIdtEntries];     /*!< Table of IDT entries. */
