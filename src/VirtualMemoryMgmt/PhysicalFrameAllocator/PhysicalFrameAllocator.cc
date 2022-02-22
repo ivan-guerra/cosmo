@@ -84,8 +84,8 @@ void PhysicalFrameAllocator::InitAvailableRegions(uint32_t mmap_addr,
         reinterpret_cast<multiboot_memory_map_t *>(mmap_end_addr);
     while (mmap < mmap_end) {
         if (mmap->type == MULTIBOOT_MEMORY_AVAILABLE) {
-            InitRegion(static_cast<uint32_t>(mmap->addr),
-                       static_cast<size_t>(mmap->len));
+            InitRegion(static_cast<uint32_t>(mmap->addr_low),
+                       static_cast<size_t>(mmap->len_low));
         }
         mmap++;
     }
