@@ -58,7 +58,7 @@ then
     mkdir -pv $COSMO_BIN_DIR
 fi
 
-# Run the genisoimage on the contents of cosmo/iso. The output is the ISO image
+# Run grub-mkrescue on the contents of cosmo/iso. The output is the ISO image
 # cosmo/bin/cosmo.iso.
 if ${COSMO_GRUB_MKRESCUE} \
     -o ../bin/cosmo.iso   \
