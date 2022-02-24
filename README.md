@@ -18,44 +18,37 @@ project progresses, additional modules will be added.
 | Virtual Memory Manager   | N         |
 | User Mode Process        | N         |
 
-Development has leaned heavily on the ["The litte bookabout os
+Development has leaned heavily on the ["The litte book about os
 development"](https://littleosbook.github.io/) as well as the the
 [OSDev](https://wiki.osdev.org/Main_Page) forums as references. Plenty of the
 source files and commit messages link back to reference material.
 
-### Running cosmo in Bochs
+### Running cosmo
 
 cosmo was developed on a Linux PC using [Bochs](https://bochs.sourceforge.io/)
-for x86 emulation.
+for x86 emulation. The cross compiler, emulator, and additional packages needed
+to build and run cosmo are all provided within a docker container. To run
+cosmo in a container you will need:
 
-#### Dependencies
+* [Docker](https://docs.docker.com/engine/install/)
+* A Linux Host with an X11 Window System installed (Xming on Windows is also
+an option though it has not been tested)
 
-To build and run cosmo on a Linux PC, you will need to install the following
-dependencies:
+To launch the container:
+```
+scripts/create_container.sh
+```
 
-* [Bochs](https://bochs.sourceforge.io/)
-* [CMake3.13+](https://cmake.org/)
-* [GNU Grub2](https://www.gnu.org/software/grub/)
-* [GNU xorriso](https://www.gnu.org/software/xorriso/)
-* [GNU mtools](https://www.gnu.org/software/mtools/)
-* GCC Cross Compiler (see below)
-* [Doxygen](https://www.doxygen.nl/index.html) (only needed to build project
-  docs)
+Once the container is created, you will be dropped into a terminal that
+contains the project files as hosted on the host PC. From here, you can build
+and run the OS in the Bochs emulator:
 
-#### Installing the GCC Cross Compiler
-
-It's best practice and required to use a cross-compiler to build cosmo. You can
-modify and run the [`scripts/setup_toolchain.sh`](scripts/setup_toolchain.sh)
-script to install the appropriate cross compilation tools on your system.
-
-#### Build and Run
-
-To build:
+To build cosmo:
 ```
 scripts/build_cosmo.sh
 ```
 
-To run cosmo in the emulator:
+To run the emulator:
 ```
 scripts/run_cosmo.sh
 ```
