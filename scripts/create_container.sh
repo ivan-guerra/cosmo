@@ -23,10 +23,11 @@ XAUTH="/tmp/.docker.xauth"
 touch ${XAUTH}
 xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 
-docker run --rm -it                   \
-    -v ${XSOCK}:${XSOCK}              \
-    -v ${XAUTH}:${XAUTH}              \
-    -e XAUTHORITY=${XAUTH}            \
-    -e DISPLAY=${DISPLAY}             \
-    -v "${COSMO_PROJECT_PATH}":/cosmo \
+docker run --rm -it                      \
+    -v ${XSOCK}:${XSOCK}                 \
+    -v ${XAUTH}:${XAUTH}                 \
+    -e XAUTHORITY=${XAUTH}               \
+    -e DISPLAY=${DISPLAY}                \
+    -u $(id -u ${USER}):$(id -g ${USER}) \
+    -v "${COSMO_PROJECT_PATH}":/cosmo    \
     ${COSMO_IMAGE}

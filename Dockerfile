@@ -37,7 +37,7 @@ RUN dnf groupinstall 'Development Tools' -y --nodocs && \
 ARG BINUTILS_VER=2.36
 ARG GCC_VER=11.1.0
 
-ENV PREFIX /root/opt/cross
+ENV PREFIX /opt/cross
 ENV TARGET i686-elf
 ENV PATH $PREFIX/bin:$PATH
 
@@ -67,4 +67,4 @@ RUN mkdir -p $HOME/src                                                          
   cd $HOME                                                                        && \
   rm -rf $HOME/src
 
-WORKDIR /cosmo
+WORKDIR /cosmo/scripts
