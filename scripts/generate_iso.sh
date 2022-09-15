@@ -8,7 +8,7 @@ LRED='\033[1;31m'
 NC='\033[0m'
 
 # Source the project configuration.
-source config_cosmo.sh
+source config.sh
 
 # Verify grub-mkrescue is installed.
 COSMO_GRUB_MKRESCUE=""

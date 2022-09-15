@@ -12,7 +12,7 @@ LRED='\033[1;31m'
 NC='\033[0m'
 
 # Source the project configuration.
-source config_cosmo.sh
+source config.sh
 
 # Verify Bochs has been installed on the system.
 if ! command -v bochs &> /dev/null

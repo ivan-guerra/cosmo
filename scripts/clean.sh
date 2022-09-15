@@ -7,7 +7,7 @@ LGREEN='\033[1;32m'
 NC='\033[0m'
 
 # Source the project configuration.
-source config_cosmo.sh
+source config.sh
 
 # Remove the binary directory.
 if [ -d $COSMO_BIN_DIR ]

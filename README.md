@@ -34,9 +34,13 @@ cosmo in a container you will need:
 * A Linux Host with an X11 Window System installed (Xming on Windows is also
 an option though it has not been tested)
 
+All the scripts referenced in this section can be found under the project's
+[scripts](scripts/) directory. When running a script, make sure your current
+working directory is the `cosmo/scripts` directory.
+
 To launch the container:
 ```
-scripts/create_container.sh
+dev.sh
 ```
 
 Once the container is created, you will be dropped into a terminal that
@@ -45,12 +49,12 @@ and run the OS in the Bochs emulator:
 
 To build cosmo:
 ```
-scripts/build_cosmo.sh
+build.sh
 ```
 
 To run the emulator:
 ```
-scripts/run_cosmo.sh
+run.sh
 ```
 
 If the above two commands succeed, you should see a Bochs window like the one
@@ -61,11 +65,11 @@ shown below.
 ### Project Documentation
 
 Project docs can be viewed in HTML. To build the project documentation,
-pass the `-d` flag to the [`scripts/build_cosmo.sh`](scripts/build_cosmo.sh)
+pass the `-d` flag to the [`scripts/build.sh`](scripts/build.sh)
 script:
 
 ```
-scripts/build_cosmo.sh -d
+build.sh -d
 ```
 
 After running the above command, cosmo docs will be installed to the project

@@ -8,7 +8,7 @@
 # compiler, emulator, etc., it's all handled by the container.
 
 # Source the project configuration.
-source config_cosmo.sh
+source config.sh
 
 # Use the latest cosmo development container. If you don't want to pull
 # from the repo, build the latest image using the Dockerfile at the project

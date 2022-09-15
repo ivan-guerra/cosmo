@@ -29,7 +29,7 @@ do
 done
 
 # Source the project configuration.
-source config_cosmo.sh
+source config.sh
 
 # Create the build directory if it does not already exist.
 if [ ! -d $COSMO_BUILD_DIR ]
